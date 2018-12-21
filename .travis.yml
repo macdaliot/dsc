@@ -7,18 +7,12 @@ addons:
     - libproc-pid-file-perl
     - libgeoip-dev
     - libmaxminddb-dev
-language: c
-compiler:
-  - clang
-  - gcc
-install: ./autogen.sh
+  sonarcloud:
+    organization: "dns-oarc"
+    token:
+      secure: "VvpJuWbBVZ/68amS2GGvMTeLIvLJ6qDWH/uSBgbv7gRvEai3G5G/W2zGcQiGGIIRkVVq+qJdQ13lVLOChvTXxNtjuo7vf2rFykwdWo0T2uGEobW2o5I54owFaDOWsz+aq8NPJcT10IpSTX+Ao3ScnZcH9/WCby7aTUXT9Pgr5DeksoyDDkRlkZB0ohN/fNLi9ppXMo7wb244ymVT274hvSCnbYMhxBA4/X8z3ZmN65Xvmn0B1rhPkPSb9eODtm4Y75w4VyQNfNwIbvSwSnVCBJNtk4jwEmi+CkPmkM16wRbfSj2O4QjmCeAO6RUyFYOdPJ6as5lWF5B/RfjTKROcCEvWiWil3BrXsab4/GazxqBA3U9XGX7THEnI+ev7GDReBc1drUhz17FTnNJFtVnsH4eqGwOhEfqqGxotHB/BqUX1HD95XvhhXlarJ4BKMHjEytQ2TxSpuD6FDZcLKhrYunp5UjtNT7ENOVEesX0OJ8yh8EfvUiGiECMV/KxuduZ0FlpXvLNbNKomWU+7yrPK6p2u5ZA34ukm5F0rlxpVNAin/5LhPmOWhcGemS/aqoARAlLjmfaEey4b477oTI4dWW4A9L4hsZwisdX2yKAAjDPvbZvS4C5pxpwOUHSK27f7Do/YmEw1kaR1mtE1nJIpXlSDK/d6t+BCJJtlqI59RT8="
 script:
+  - ./autogen.sh
   - ./configure --enable-warn-all
-  - make dist
-  - tar zxvf *.tar.gz
-  - cd dsc-*[0-9]
-  - mkdir build
-  - cd build
-  - ../configure --enable-warn-all
-  - make
-  - make test
+  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+  - sonar-scanner
